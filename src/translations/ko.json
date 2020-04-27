@@ -1,6 +1,13 @@
 {
-  "firstPage": {
-    "hello": "안녕!",
-    "good morning": "좋은아침"
+  "testShowTranslation": {
+    "terms": "{}/{v}{}{v}계속 진행함으로써 {}notiRed/이용약관{} 및, {}notiRed/개인정보 취급방침{}\n에 동의한 것으로 간주됩니다.",
+    "terms2": {
+      "line1": "{}black/{v}{}계속 진행함으로써, ",
+      "line2": "{}red/이용약관{} ",
+      "line3": "및, ",
+      "line4": "{}notiRed/개인정보 취급방침{}",
+      "line5": "에",
+      "line6": "동의한 것으로 간주됩니다."
+    }
   }
 }

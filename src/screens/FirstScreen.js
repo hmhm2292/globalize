@@ -1,19 +1,30 @@
 import React from 'react';
-
-import {SafeAreaView, View, Text, StatusBar} from 'react-native';
-
-import i18n from '../translations/i18n-js';
+import colors from '../globals/colors';
+import {SafeAreaView, View, Text, StatusBar, ScrollView} from 'react-native';
+import FontText from '../components/FontText';
+import {ShowTranslation, getTranslation} from '../components/ShowTranslation';
 
 const FirstScreen = () => {
-  console.log(i18n.t);
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <View>
-          <Text>{i18n.t('firstPage.hello')}</Text>
-          <Text>{i18n.t('firstPage.good morning')}</Text>
-        </View>
+        <ShowTranslation
+          style_={{
+            marginBottom: 10,
+            textAlign: 'center',
+            marginHorizontal: 100,
+          }}
+          color={colors.CNTDarkGreen}
+          size={14}
+          highlightSize={16}
+          highlightWeight={'b'}
+          highlightTextDecoLine={'underline'}>
+          {getTranslation('testShowTranslation.terms', {'{v}': 'testyp300'})}
+        </ShowTranslation>
+        <ShowTranslation color={colors.CNTDarkGreen} weight={'b'} size={20}>
+          {'hihi this is a test'}
+        </ShowTranslation>
       </SafeAreaView>
     </>
   );
