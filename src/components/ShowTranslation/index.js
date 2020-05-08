@@ -1,28 +1,33 @@
 import React from 'react';
-import {View} from 'react-native';
-import FontText from '../FontText';
+import {Text} from 'react-native';
 import i18n from '../../translations/i18n-js';
 import colors from '../../globals/colors';
 
 export const getTranslation = (translationKey, replace = null) => {
   const text = i18n.t(translationKey);
+  const curlyBrackets = '{}';
+  const emptyString = '';
 
   if (replace === null) {
-    if (text.includes('{}')) {
-      return text.split('{}');
+    if (text.includes(curlyBrackets)) {
+      return text.split(curlyBrackets);
     }
-    return [text];
+    return text;
   } else if (replace) {
     const regex = new RegExp(Object.keys(replace).join('|'), 'g');
-
     const replacedText = text.replace(regex, function(matched) {
       return replace[matched];
     });
 
-    if (replacedText.includes('{}')) {
-      return replacedText.split('{}');
+    if (replacedText.includes(curlyBrackets)) {
+      const bracketsIncluded = replacedText.split(curlyBrackets);
+      if (bracketsIncluded.includes(emptyString)) {
+        return bracketsIncluded.filter(string => string !== emptyString);
+      } else {
+        return bracketsIncluded;
+      }
     }
-    return [replacedText];
+    return replacedText;
   }
 };
 
@@ -30,20 +35,58 @@ export const ShowTranslation = ({
   color,
   weight,
   size,
-  textDecoLine,
   children,
   style,
   highlightWeight,
   highlightTextDecoLine,
   highlightSize,
+  ...rest
 }) => {
   let renderText;
+  let textWeight;
+  let highlightTextWeight;
+
+  switch (weight) {
+    case 'l':
+      textWeight = '300';
+      break;
+
+    case 'r':
+      textWeight = '400';
+      break;
+
+    case 'm':
+      textWeight = '500';
+      break;
+
+    case 'b':
+      textWeight = '700';
+      break;
+  }
+
+  switch (highlightWeight) {
+    case 'l':
+      highlightTextWeight = '300';
+      break;
+
+    case 'r':
+      highlightTextWeight = '400';
+      break;
+
+    case 'm':
+      highlightTextWeight = '500';
+      break;
+
+    case 'b':
+      highlightTextWeight = '700';
+      break;
+  }
 
   if (Array.isArray(children)) {
     renderText = children.map((item, index) => {
       if (item.includes('/')) {
-        const splitText = item.split('/');
-        console.log('splitText', splitText);
+        const colorText = item.split('/');
+
         let fontColor;
         const {
           gray900,
@@ -67,7 +110,7 @@ export const ShowTranslation = ({
           bannerBlue,
           toastGray,
         } = colors;
-        switch (splitText[0]) {
+        switch (colorText[0]) {
           case 'gray900':
             fontColor = gray900;
             break;
@@ -143,56 +186,43 @@ export const ShowTranslation = ({
         }
 
         return (
-          <FontText
+          <Text
+            key={index}
             style={{
               textDecorationLine: highlightTextDecoLine
                 ? highlightTextDecoLine
                 : 'none',
-            }}
-            size={highlightSize ? highlightSize : size}
-            weight={highlightWeight}
-            color={fontColor}>
-            {splitText[1]}
-          </FontText>
+              fontSize: highlightSize ? highlightSize : size,
+              fontWeight: highlightTextWeight
+                ? highlightTextWeight
+                : textWeight,
+              color: fontColor ? fontColor : color,
+            }}>
+            {colorText[1]}
+          </Text>
         );
       } else {
-        return (
-          <FontText
-            style={{
-              textDecorationLine: textDecoLine ? textDecoLine : 'none',
-            }}
-            weight={weight}
-            size={size}
-            color={color}>
-            {item}
-          </FontText>
-        );
+        return item;
       }
     });
   } else {
-    renderText = (
-      <FontText
-        style={{
-          textDecorationLine: textDecoLine ? textDecoLine : 'none',
-        }}
-        weight={weight}
-        size={size}
-        color={color}>
-        {children}
-      </FontText>
-    );
+    renderText = children;
   }
 
   return (
-    <FontText
+    <Text
       style={Object.assign(
         {},
         {
-          alignItems: 'center',
+          color: color,
+          fontWeight: textWeight,
+          fontSize: size,
         },
         style,
       )}>
       {renderText}
-    </FontText>
+    </Text>
   );
 };
+
+ShowTranslation.defaultProps = {color: colors.gray900, weight: 'm'};
