@@ -266,4 +266,4 @@ Component using ShowTranslation and getTranslation
 
 ## Example of different cases and how its displayed on the screen
 
-![]()
+![](https://github.com/hmhm2292/globalize/blob/master/src/READMEImage/Screen%20Shot%202020-05-08%20at%201.48.03%20PM.png)
